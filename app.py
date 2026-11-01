@@ -162,21 +162,27 @@ class ShopEasyState(TypedDict):
 # ===========================================
 # CACHE ALL HEAVY RESOURCES - loads only once
 # ===========================================
+
 @st.cache_resource
 def load_all_resources():
-    api_key = os.getenv("GROQ_API_KEY", "")
+    api_key = st.secrets.get(
+        "GROQ_API_KEY",
+        os.getenv("GROQ_API_KEY", "")
+    )
+
     if not api_key:
-        st.error("GROQ_API_KEY not found in .env file")
+        st.error("GROQ_API_KEY not found in secrets or environment")
         st.stop()
 
-   llm = ChatGroq(
-    model="openai/gpt-oss-120b",
-    temperature=0,
-    max_tokens=512,
-    api_key=api_key,
-)
+    llm = ChatGroq(
+        model="openai/gpt-oss-120b",
+        temperature=0,
+        max_tokens=512,
+        api_key=api_key,
+    )
 
     embedder = SentenceTransformer("all-MiniLM-L6-v2")
+
 
     class EmbedFn(chromadb.EmbeddingFunction):
         def __call__(self, input):
