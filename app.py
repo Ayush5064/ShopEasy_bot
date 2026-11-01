@@ -169,12 +169,12 @@ def load_all_resources():
         st.error("GROQ_API_KEY not found in .env file")
         st.stop()
 
-    llm = ChatGroq(
-        model="llama-3.3-70b-versatile",
-        temperature=0,
-        max_tokens=512,
-        api_key=api_key,
-    )
+   llm = ChatGroq(
+    model="openai/gpt-oss-120b",
+    temperature=0,
+    max_tokens=512,
+    api_key=api_key,
+)
 
     embedder = SentenceTransformer("all-MiniLM-L6-v2")
 
